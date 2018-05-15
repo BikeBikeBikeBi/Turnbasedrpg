@@ -1,0 +1,106 @@
+--turn based v2
+function _init()
+player1 = {x=20,y=20,hp=10,timer=0,sprite=1}
+option = {a="option1",b="option2",c="option3",d="option4",e="option5",f="option6"}
+cursor1 = {x=17,y=82,flash=false,move=true,moveleft=false,moveright=true,moveup=false,movedown=false}
+end
+
+function draw_arena()
+rect(0,0,124,124,3)
+rectfill(2,2,122,122,4)
+end
+
+function draw_player()
+spr(player1.sprite,player1.x,player1.y)
+end
+
+function draw_menu()
+rectfill(20,80,100,120,9)
+end
+
+function draw_cursor()
+line(cursor1.x-2,cursor1.y+1,cursor1.x+2,cursor1.y+1,2)
+line(cursor1.x,cursor1.y-1,cursor1.x,cursor1.y+3,2)
+line(cursor1.x+1,cursor1.y,cursor1.x+1,cursor1.y+2,2)
+end
+ 
+function can_cursor_move()
+
+if cursor1.x==17 then 
+cursor1.moveleft = false
+cursor1.moveright = true
+end
+if cursor1.x==51 then
+cursor1.moveleft = true
+cursor1.moveright = false
+end
+if cursor1.y==82 then
+cursor1.moveup = false 
+cursor1.movedown = true
+end
+if cursor1.y==88 or cursor1.y==94 then
+cursor1.moveup = true
+cursor1.movedown = true
+end
+if cursor1.y== 100 then
+cursor1.moveup = true
+cursor1.movedown = false
+end
+
+end 
+
+function move_cursor()
+
+if cursor1.moveleft==true then
+	if (btnp(0)) cursor1.x=cursor1.x-34 
+end
+if cursor1.moveright==true then	
+	if (btnp(1)) cursor1.x=cursor1.x+34 
+end	
+if cursor1.movedown==true then	
+	if (btnp(3)) cursor1.y=cursor1.y+6  
+end
+if cursor1.moveup==true then	
+	if (btnp(2)) cursor1.y=cursor1.y-6  
+end
+
+end 
+
+function menu_options()
+print(option.a,22,82,13)
+print(option.b,22,88,13)
+print(option.c,22,94,13)
+print(option.d,22,100,13)
+print(option.e,55,82,13)
+print(option.f,55,88,13)
+end
+
+function _update()
+can_cursor_move()
+move_cursor()
+player1.timer += 1
+if player1.timer > 30 then
+--	player1.y = 19
+	player1.sprite = 2
+ cursor1.flash=true
+end
+if player1.timer > 60 then
+	player1.timer = 0
+--	player1.y = 20
+	player1.sprite = 1
+	cursor1.flash=false
+end
+end
+
+function _draw()
+cls()
+draw_arena()
+draw_player()
+draw_menu()
+menu_options()
+if (cursor1.flash) then
+draw_cursor()
+end
+print(cursor1.x,0,0,9)
+print(cursor1.y,0,10,9)
+end
